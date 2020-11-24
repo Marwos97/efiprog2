@@ -6,7 +6,8 @@ import secrets, os
 
 @app.route('/')
 def home():
-    skins = Addskin.query.filter(Addskin.stock > 0)
+    page = request.args.get('page',1,type=int)
+    skins = Addskin.query.filter(Addskin.stock > 0).paginate(page=page, per_page=4)
     barnds = Brand.query.join(Addskin, (Brand.id == Addskin.brand_id)).all()
     categories = Category.query.join(Addskin, (Category.id == Addskin.category_id)).all()
     return render_template('products/index.html', skins = skins, collections=barnds, categories=categories)
@@ -14,19 +15,18 @@ def home():
 @app.route('/collection/<int:id>')
 def get_collection(id):
     brand = Addskin.query.filter_by(brand_id=id)
-    print(brand, "ES ACA")
     categories = Category.query.join(Addskin, (Category.id == Addskin.category_id)).all()
     barnds = Brand.query.join(Addskin, (Brand.id == Addskin.brand_id)).all()
     return render_template('products/index.html', brands = brand, collections=barnds, categories=categories)
 
 @app.route('/category/<int:id>')
 def get_category(id):
-    category = Addskin.query.filter_by(category_id=id)
-    print(category,"ASDASDASDASD")
+    page = request.args.get('page',1,type=int)
+    get_cat = Category.query.filter_by(id=id).first_or_404()
+    category = Addskin.query.filter_by(category=get_cat).paginate(page=page, per_page=4)
     categories = Category.query.join(Addskin, (Category.id == Addskin.category_id)).all()
     barnds = Brand.query.join(Addskin, (Brand.id == Addskin.brand_id)).all()
-    print(barnds,"AKUSHTDFIASUYJDGFAKSJHGDFASKHGDFASJDHGAFSDJHGASFDJHGASFD")
-    return render_template('products/index.html', category = category, categories = categories, collections=barnds)
+    return render_template('products/index.html', category = category, categories = categories, collections=barnds,get_cat=get_cat)
 
 @app.route('/addcollection', methods=['GET','POST'])
 def addcollection():
