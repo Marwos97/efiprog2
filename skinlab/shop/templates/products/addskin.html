@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+{% include '_messages.html' %}
+<div class="container">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <h2 class="text-center bg-info p-2"> Agregar Skin</h2>
+        {% from "_formhelpers.html" import render_field %}
+        <form action="" method="POST" enctype="multipart/form-data">
+            {{ render_field(form.name, class="form-control", placeholder='Agregar nombre skin' )}}
+            {{ render_field(form.price, class="form-control", placeholder='Agregar precio skin' )}}
+            {{ render_field(form.float, class="form-control", placeholder='Agregar desgaste de skin' )}}
+            {{ render_field(form.stock, class="form-control", placeholder='Agregar stock skin' )}}
+            <label for="brand"> Agregar a brand</label>
+            <select name="brand" id="brand" class="form-control" required>
+                <option value=""> Seleccionar edicion skin</option>
+                {% for brand in brands %}
+                <option value="{{brand.id}}">{{brand.name}}</option>
+                {% endfor %}
+            </select>
+            <label for="category"> Agregar a category</label>
+            <select name="category" id="category" class="form-control" required>
+                <option value=""> Seleccionar categorua</option>
+                {% for category in categories %}
+                <option value="{{category.id}}">{{category.name}}</option>
+                {% endfor %}
+            </select>
+            {{ render_field(form.image, class="form-control" )}}
+            <p><input type="submit" value="Agregar Skin" class="btn btn-info btn-large"></p>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <div class="text-centerh1 text-white bg-primary p-2"> Iniciar Sesion</div>
+    <div class="container">
+        {% from "_formhelpers.html" import render_field %}
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4"></div>
+            <form method="POST" enctype="multipart/form-data">
+            <div>
+                {{ render_field(form.email, class="form-control" ) }}
+                {{ render_field(form.password, class="form-control" )}}
+                <p><input type="submit" value="Iniciar" class="btn btn-info btn-large"></p>
+            </div>
+            </form>
+        <div class="col-md-4"></div>
+        </div>
+    </div>
+
+{% endblock content %}
