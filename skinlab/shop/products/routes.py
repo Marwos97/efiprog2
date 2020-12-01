@@ -7,7 +7,7 @@ import secrets, os
 @app.route('/')
 def home():
     page = request.args.get('page',1,type=int)
-    skins = Addskin.query.filter(Addskin.stock > 0).paginate(page=page, per_page=4)
+    skins = Addskin.query.filter(Addskin.stock > 0).paginate(page=page, per_page=8)
     barnds = Brand.query.join(Addskin, (Brand.id == Addskin.brand_id)).all()
     categories = Category.query.join(Addskin, (Category.id == Addskin.category_id)).all()
     return render_template('products/index.html', skins = skins, collections=barnds, categories=categories)
@@ -16,7 +16,7 @@ def home():
 def get_collection(id):
     page = request.args.get('page',1,type=int)
     get_brand = Brand.query.filter_by(id=id).first_or_404()
-    brand = Addskin.query.filter_by(brand=get_brand).paginate(page=page, per_page=4)
+    brand = Addskin.query.filter_by(brand=get_brand).paginate(page=page, per_page=8)
     categories = Category.query.join(Addskin, (Category.id == Addskin.category_id)).all()
     barnds = Brand.query.join(Addskin, (Brand.id == Addskin.brand_id)).all()
     return render_template('products/index.html', brands = brand, collections=barnds, categories=categories ,get_brand=get_brand)
@@ -25,7 +25,7 @@ def get_collection(id):
 def get_category(id):
     page = request.args.get('page',1,type=int)
     get_cat = Category.query.filter_by(id=id).first_or_404()
-    category = Addskin.query.filter_by(category=get_cat).paginate(page=page, per_page=4)
+    category = Addskin.query.filter_by(category=get_cat).paginate(page=page, per_page=8)
     categories = Category.query.join(Addskin, (Category.id == Addskin.category_id)).all()
     barnds = Brand.query.join(Addskin, (Brand.id == Addskin.brand_id)).all()
     return render_template('products/index.html', category = category, categories = categories, collections=barnds,get_cat=get_cat)

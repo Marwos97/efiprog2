@@ -1,6 +1,5 @@
 {% extends 'layout.html'%}
 {% block content %}
-{% include '_messages.html' %}
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Admin</a>
@@ -23,15 +22,15 @@
                 <a class="nav-link btn btn-info" href="/addskin">Agregar skin</a>
               </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-          </form>
+          <div style = "display: flex;">
+            <a class="nav-link" href="/logout">Logout</a>
+          </div>
         </div>
       </nav>
-
+<br>
 <div class="container">
-    <table class="table table-sm table-bordered">
+    {% include '_messages.html' %}
+    <table class="table table-sm table-bordered table-dark">
         <thead>
             <th>Nombre</th>
             <th>Precio</th>

@@ -4,17 +4,22 @@
 
 <div class="text-centerh1 text-white navbar-dark bg-dark p-2"> Iniciar Sesion</div>
     <div class="container">
+        <br>
+        {% include '_messages.html' %}
+        <br>
         {% from "_formhelpers.html" import render_field %}
         <div class="row">
             <div class="col-md-4"></div>
             <div class="col-md-4"></div>
             <form method="POST" enctype="multipart/form-data">
             <div>
-                {{ render_field(form.email, class="form-control" ) }}
+                <label>{{ render_field(form.email, class="form-control" ) }}</label>
                 {{ render_field(form.password, class="form-control" )}}
                 <p><input type="submit" value="Iniciar" class="btn btn-info btn-large"></p>
+                <a class="btn btn-info btn-large" href="{{url_for('register')}}">Register</a>
             </div>
             </form>
+            
         <div class="col-md-4"></div>
     </div>
 </div>

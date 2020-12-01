@@ -55,10 +55,13 @@ def login():
     if request.method == 'POST' and form.validate():
         user = User.query.filter_by(email= form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            print("HOLA ")
+            print(form.email.data)
             session['email'] = form.email.data
-            flash(f'Bienvenido {form.email.data}, haz iniciado sesion', 'success')
-            return redirect(request.args.get('next') or url_for('admin'))
+            if form.email.data == "joe.vidal.bmx@hotmail.com" :
+                flash(f'Bienvenido {form.email.data}, haz iniciado sesion', 'success')
+                return redirect(request.args.get('next') or url_for('admin'))
+            else:
+                return redirect(url_for('home'))
         else:
             flash('Password incorrecta', 'danger')
     return render_template('admin/login.html', form=form, title='Iniciar Sesion')

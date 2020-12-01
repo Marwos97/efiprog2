@@ -6,7 +6,7 @@
     {% include '_messages.html' %}
     <div class="row">
         <div class = "col-md-12">
-            <table class = "table table-sm">
+            <table class = "table table-sm table-dark">
                 <thead>
                     <th>#</th>
                     <th>Image</th>
@@ -35,7 +35,7 @@
                     <br>
                     <tr>
                         <td></td>
-                        <td><a href=""><h4>Continuar comprando</h4></a></td>
+                        <td><a href="{{url_for('home')}}"><h4>Continuar comprando</h4></a></td>
                         <td colspan="4"><h4>Total: ${{grantotal}}</h4></td>
                     </tr>
                 </tbody>
