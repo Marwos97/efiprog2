@@ -1,12 +1,13 @@
 from shop import db
 from datetime import datetime
+from sqlalchemy.dialects.mysql import DECIMAL
 
 
 class Addskin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
-    price = db.Column(db.Numeric(), nullable=False)
-    float = db.Column(db.Numeric(), nullable=False)
+    price = db.Column(db.DECIMAL(10,0), nullable=False)
+    float = db.Column(db.DECIMAL(10,0), nullable=False)
     stock = db.Column(db.Integer(), default=1)
     
     brand_id = db.Column(db.Integer, db.ForeignKey('brand.id'),

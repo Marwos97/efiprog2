@@ -14,10 +14,12 @@ def home():
 
 @app.route('/collection/<int:id>')
 def get_collection(id):
-    brand = Addskin.query.filter_by(brand_id=id)
+    page = request.args.get('page',1,type=int)
+    get_brand = Brand.query.filter_by(id=id).first_or_404()
+    brand = Addskin.query.filter_by(brand=get_brand).paginate(page=page, per_page=4)
     categories = Category.query.join(Addskin, (Category.id == Addskin.category_id)).all()
     barnds = Brand.query.join(Addskin, (Brand.id == Addskin.brand_id)).all()
-    return render_template('products/index.html', brands = brand, collections=barnds, categories=categories)
+    return render_template('products/index.html', brands = brand, collections=barnds, categories=categories ,get_brand=get_brand)
 
 @app.route('/category/<int:id>')
 def get_category(id):
@@ -27,6 +29,13 @@ def get_category(id):
     categories = Category.query.join(Addskin, (Category.id == Addskin.category_id)).all()
     barnds = Brand.query.join(Addskin, (Brand.id == Addskin.brand_id)).all()
     return render_template('products/index.html', category = category, categories = categories, collections=barnds,get_cat=get_cat)
+
+@app.route('/product/<int:id>')
+def single_page(id):
+    skin = Addskin.query.get_or_404(id)
+    categories = Category.query.join(Addskin, (Category.id == Addskin.category_id)).all()
+    barnds = Brand.query.join(Addskin, (Brand.id == Addskin.brand_id)).all()
+    return render_template('products/single_page.html', skin=skin, collections=barnds, categories=categories)
 
 @app.route('/addcollection', methods=['GET','POST'])
 def addcollection():

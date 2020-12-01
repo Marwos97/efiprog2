@@ -26,8 +26,7 @@ def categories():
 
 @app.route("/admin")
 def admin():
-    print(session['email'])
-    if 'email' not in session:
+    if 'email' not in session and session['email'] == "admin@admin.com":
         print("esta el email")
         flash(f'Iniciar Sesion antes', 'danger')
         return redirect(url_for('login'))
@@ -65,13 +64,7 @@ def login():
     return render_template('admin/login.html', form=form, title='Iniciar Sesion')
 
 
-@app.route('/logout', methods=['GET', 'POST'])
+@app.route('/logout')
 def logout():
-    print("hola")
-    form = LoginForm(request.form)
-    if session['email']:
-        session.clear()
-        redirect(url_for('login'))
-    else:
-        redirect(url_for('login'))
-    return render_template('admin/login.html', form=form, title='Iniciar Sesion')
+    session.clear()
+    return redirect(url_for('login'))

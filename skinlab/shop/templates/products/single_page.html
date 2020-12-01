@@ -1,0 +1,68 @@
+{% extends 'layout.html' %}
+{%block content%}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Home</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">SKINS</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    COLECCIÓN
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for collect in collections %}
+                    <a class="dropdown-item" href="{{url_for('get_collection', id = collect.id)}}">{{collect.name}}</a>
+                    {%endfor%}
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    CATEGORIAS
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for cat in categories %}
+                    <a class="dropdown-item" href="{{url_for('get_category', id = cat.id)}}">{{cat.name}}</a>
+                    {%endfor%}
+                </div>
+                <li class ="nav-item">
+                    <a class = "nav-link disabled" href="#" tabindex="-1">Carro({{session['Shoppingcart']|length}})</a>
+                </li>
+            </li>
+            <form class="form-inline my-2 my-lg-0">
+                <a class="nav-link" href="/logout">Logout</a>
+            </form>
+        </ul>
+    </div>
+</nav>
+<br>
+<div class="container">
+    <div class = "row">
+        <div class = "col-md-6" id="b_image">
+            <img src="{{url_for('static', filename='images/'+skin.image)}}" alt="{{skin.name}}" width="400" height="400">
+
+        </div>
+        <div class = "col-md-6">
+            <h4>Skin name: {{skin.name}}.</h4>
+            <hr>
+            <p>Skin precio: ${{skin.price}}.</p>
+            <br>
+            <p>Estado: {{skin.float}} de desgaste.</p>
+            <br>
+            <p>Stock: {{skin.stock}} unidades.</p>
+            <form action="{{url_for('AddCart')}}" method="POST">
+                <input type="hidden" name="skin_id" value = "{{skin.id}}">
+                <button type = "submit" class = "btn btn-sm btn-warning">Agregar al carro</button>
+                <label for="">Cantidad: </label>
+                <input type="number" name="quantity" id ="" value="1" min="1" max ="{{skin.stock}}">
+            </form>
+        </div>
+    </div>
+</div>
+{%endblock%}

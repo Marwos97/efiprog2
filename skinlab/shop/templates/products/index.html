@@ -1,71 +1,97 @@
 {% extends 'layout.html' %}
 {%block content%}
-<div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Home</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">SKINS</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        COLECCIÓN
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        {% for collect in collections %}
-                        <a class="dropdown-item" href="{{url_for('get_collection', id = collect.id)}}">{{collect.name}}</a>
-                        {%endfor%}
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        CATEGORIAS
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        {% for cat in categories %}
-                        <a class="dropdown-item" href="{{url_for('get_category', id = cat.id)}}">{{cat.name}}</a>
-                        {%endfor%}
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Disabled</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-        </div>
-    </nav>
-</div>
-
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Home</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">SKINS</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    COLECCIÓN
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for collect in collections %}
+                    <a class="dropdown-item" href="{{url_for('get_collection', id = collect.id)}}">{{collect.name}}</a>
+                    {%endfor%}
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    CATEGORIAS
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for cat in categories %}
+                    <a class="dropdown-item" href="{{url_for('get_category', id = cat.id)}}">{{cat.name}}</a>
+                    {%endfor%}
+                </div>
+            </li>
+            <li class ="nav-item">
+                <a class = "nav-link disabled" href="#" tabindex="-1">Carro({{session['Shoppingcart']|length}})</a>
+            </li>
+        </ul>
+        
+    </div>
+    <div style = "display: flex;">
+        <a class="nav-link" href="/logout">Logout</a>
+    </div>
+    <img src="{{url_for('static',filename='images/icono.png')}}" alt="www.skinlab.com" width="200">
+</nav>
 <div class="container">
     <div class="row">
-    {% if brands%}
-    {% for b in brands %}
-        <div class ="col-md-3 mt-3">
-            <div class="card">
-                <img src="{{url_for('static', filename='images/' + b.image)}}" alt="{{b.name}}" class="card-img-top" height="200">
-                <div class="card-body">
-                    <h5 class = "text-center">{{b.name}}</h5>
-                    <p class = "text-center"> Precio: ${{b.price}}</p>
+        <div class="row">
+        {% if brands%}
+        {% for b in brands.items %}
+            <div class ="col-md-3 mt-3">
+                <div class="card">
+                    <img src="{{url_for('static', filename='images/' + b.image)}}" alt="{{b.name}}" class="card-img-top" height="200">
+                    <div class="card-body">
+                        <h5 class = "text-center">{{b.name}}</h5>
+                        <p class = "text-center"> Precio: ${{b.price}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{url_for('single_page', id=b.id)}}" class = "float-left btn btn-sm btn-primary">Detalles</a>
+                        <form action="{{url_for('AddCart')}}" method="POST">
+                            <input type="hidden" name="skin_id" value = "{{b.id}}">
+                            <button type = "submit" class = "btn btn-sm btn-warning float-right">Agregar al carro</button>
+                            <label for="">Cantidad: </label>
+                            <input type="hidden" name="quantity" id ="" value="1"">
+                        </form>
+                    </div>
                 </div>
-                <div class="card-footer">
-                    <a href="#" class = "float-left btn btn-sm btn-primary">Detalles</a>
-                    <a href="#" class = "float-right btn btn-sm btn-warning">add to card</a>
+            </div>
+        {%endfor%}
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    {%if brands.has_prev %}
+                    <a href="{{url_for('get_collection',id=get_brand.id, page=brands.prev_num)}}" class = "btn btn-info btn-sm mt-3">Anterior</a>
+                    {%endif%}
+                    {% for page_num in brands.iter_pages() %}
+                    {% if page_num %}
+                    {%if brands.page == page_num%}
+                    <a href="{{url_for('get_collection',id=get_brand.id, page=page_num)}}" class = "btn btn-info btn-sm mt-3">{{ page_num }}</a>
+                    {%else%}
+                    <a href="{{url_for('get_collection',id=get_brand.id, page=page_num)}}" class = "btn btn-outline-info btn-sm mt-3">{{ page_num }}</a>
+                    {%endif%}
+                    {% else %}
+                    ... 
+                    {%endif%}
+                    {% endfor %}
+                    {%if brands.has_next %}
+                    <a href="{{url_for('get_collection',id=get_brand.id,page=brands.next_num)}}" class = "btn btn-info btn-sm mt-3">Proxima</a>
+                    {%endif%}
                 </div>
             </div>
         </div>
-    {%endfor%}
-    </div>
-    {% elif category%}
-    {%for cat in category.items%}
-    <div class="row">
+        {% elif category%}
+        {%for cat in category.items%}
         <div class ="col-md-3 mt-3">
             <div class="card">
                 <img src="{{url_for('static', filename='images/' + cat.image)}}" alt="{{cat.name}}" class="card-img-top" height="200">
@@ -74,77 +100,85 @@
                     <p class = "text-center"> Precio: ${{cat.price}}</p>
                 </div>
                 <div class="card-footer">
-                    <a href="#" class = "float-left btn btn-sm btn-primary">Detalles</a>
-                    <a href="#" class = "float-right btn btn-sm btn-warning">add to card</a>
+                    <a href="{{url_for('single_page', id=cat.id)}}" class = "float-left btn btn-sm btn-primary">Detalles</a>
+                    <form action="{{url_for('AddCart')}}" method="POST">
+                        <input type="hidden" name="skin_id" value = "{{cat.id}}">
+                        <button type = "submit" class = "btn btn-sm btn-warning float-right">Agregar al carro</button>
+                        <label for="">Cantidad: </label>
+                        <input type="hidden" name="quantity" id ="" value="1">
+                    </form>
                 </div>
             </div>
         </div>
         {%endfor%}
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col text-center">
-                {%if category.has_prev %}
-                <a href="{{url_for('get_category',id=get_cat.id, page=category.prev_num)}}" class = "btn btn-info btn-sm mt-3">Anterior</a>
-                {%endif%}
-                {% for page_num in category.iter_pages() %}
-                {% if page_num %}
-                {%if category.page == page_num%}
-                <a href="{{url_for('get_category',id=get_cat.id, page=page_num)}}" class = "btn btn-info btn-sm mt-3">{{ page_num }}</a>
-                {%else%}
-                <a href="{{url_for('get_category',id=get_cat.id, page=page_num)}}" class = "btn btn-outline-info btn-sm mt-3">{{ page_num }}</a>
-                {%endif%}
-                {% else %}
-                ... 
-                {%endif%}
-                {% endfor %}
-                {%if category.has_next %}
-                <a href="{{url_for('get_category',id=get_cat.id,page=category.next_num)}}" class = "btn btn-info btn-sm mt-3">Proxima</a>
-                {%endif%}
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        {%else%}
-        {% for skin in skins.items %}
-        <div class ="col-md-3 mt-3">
-            <div class="card">
-                <img src="{{url_for('static', filename='images/' + skin.image)}}" alt="{{skin.name}}" class="card-img-top" height="200">
-                <div class="card-body">
-                    <h5 class = "text-center">{{skin.name}}</h5>
-                    <p class = "text-center"> Precio: ${{skin.price}}</p>
-                </div>
-                <div class="card-footer">
-                    <a href="#" class = "float-left btn btn-sm btn-primary">Detalles</a>
-                    <a href="#" class = "float-right btn btn-sm btn-warning">add to card</a>
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    {%if category.has_prev %}
+                    <a href="{{url_for('get_category',id=get_cat.id, page=category.prev_num)}}" class = "btn btn-info btn-sm mt-3">Anterior</a>
+                    {%endif%}
+                    {% for page_num in category.iter_pages() %}
+                    {% if page_num %}
+                    {%if category.page == page_num%}
+                    <a href="{{url_for('get_category',id=get_cat.id, page=page_num)}}" class = "btn btn-info btn-sm mt-3">{{ page_num }}</a>
+                    {%else%}
+                    <a href="{{url_for('get_category',id=get_cat.id, page=page_num)}}" class = "btn btn-outline-info btn-sm mt-3">{{ page_num }}</a>
+                    {%endif%}
+                    {% else %}
+                    ... 
+                    {%endif%}
+                    {% endfor %}
+                    {%if category.has_next %}
+                    <a href="{{url_for('get_category',id=get_cat.id,page=category.next_num)}}" class = "btn btn-info btn-sm mt-3">Proxima</a>
+                    {%endif%}
                 </div>
             </div>
         </div>
-        {%endfor%}
-    </div>
-    <div class="container">
         <div class="row">
-            <div class="col text-center">
-                {%if skins.has_prev %}
-                <a href="{{url_for('home',page=skins.prev_num)}}" class = "btn btn-info btn-sm mt-3">Anterior</a>
-                {%endif%}
-                {% for page_num in skins.iter_pages() %}
-                {% if page_num %}
-                {%if skins.page == page_num%}
-                <a href="{{url_for('home',page=page_num)}}" class = "btn btn-info btn-sm mt-3">{{ page_num }}</a>
-                {%else%}
-                <a href="{{url_for('home',page=page_num)}}" class = "btn btn-outline-info btn-sm mt-3">{{ page_num }}</a>
-                {%endif%}
-                {% else %}
-                ... 
-                {%endif%}
-                {% endfor %}
-                {%if skins.has_next %}
-                <a href="{{url_for('home',page=skins.next_num)}}" class = "btn btn-info btn-sm mt-3">Proxima</a>
-                {%endif%}
+            {%else%}
+            {% for skin in skins.items %}
+            <div class ="col-md-3 mt-3">
+                <div class="card">
+                    <img src="{{url_for('static', filename='images/' + skin.image)}}" alt="{{skin.name}}" class="card-img-top" height="200">
+                    <div class="card-body">
+                        <h5 class = "text-center">{{skin.name}}</h5>
+                        <p class = "text-center"> Precio: ${{skin.price}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{url_for('single_page', id=skin.id)}}" class = "float-left btn btn-sm btn-primary">Detalles</a>
+                        <form action="{{url_for('AddCart')}}" method="POST">
+                            <input type="hidden" name="skin_id" value = "{{skin.id}}">
+                            <button type = "submit" class = "btn btn-sm btn-warning float-right">Agregar al carro</button>
+                            <input type="hidden" name="quantity" id ="" value="1" min="1" max ="{{skin.stock}}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    {%if skins.has_prev %}
+                    <a href="{{url_for('home',page=skins.prev_num)}}" class = "btn btn-info btn-sm mt-3">Anterior</a>
+                    {%endif%}
+                    {% for page_num in skins.iter_pages() %}
+                    {% if page_num %}
+                    {%if skins.page == page_num%}
+                    <a href="{{url_for('home',page=page_num)}}" class = "btn btn-info btn-sm mt-3">{{ page_num }}</a>
+                    {%else%}
+                    <a href="{{url_for('home',page=page_num)}}" class = "btn btn-outline-info btn-sm mt-3">{{ page_num }}</a>
+                    {%endif%}
+                    {% else %}
+                    ... 
+                    {%endif%}
+                    {% endfor %}
+                    {%if skins.has_next %}
+                    <a href="{{url_for('home',page=skins.next_num)}}" class = "btn btn-info btn-sm mt-3">Proxima</a>
+                    {%endif%}
+                </div>
             </div>
         </div>
-    </div>
     {%endif%}
 </div>
 </div>
