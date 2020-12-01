@@ -6,6 +6,10 @@ import secrets, os
 
 @app.route('/')
 def home():
+    if 'email' not in session:
+        print("esta el email")
+        flash(f'Iniciar Sesion antes', 'danger')
+        return redirect(url_for('login'))
     page = request.args.get('page',1,type=int)
     skins = Addskin.query.filter(Addskin.stock > 0).paginate(page=page, per_page=8)
     barnds = Brand.query.join(Addskin, (Brand.id == Addskin.brand_id)).all()
@@ -14,6 +18,10 @@ def home():
 
 @app.route('/collection/<int:id>')
 def get_collection(id):
+    if 'email' not in session:
+        print("esta el email")
+        flash(f'Iniciar Sesion antes', 'danger')
+        return redirect(url_for('login'))
     page = request.args.get('page',1,type=int)
     get_brand = Brand.query.filter_by(id=id).first_or_404()
     brand = Addskin.query.filter_by(brand=get_brand).paginate(page=page, per_page=8)
@@ -23,6 +31,10 @@ def get_collection(id):
 
 @app.route('/category/<int:id>')
 def get_category(id):
+    if 'email' not in session:
+        print("esta el email")
+        flash(f'Iniciar Sesion antes', 'danger')
+        return redirect(url_for('login'))
     page = request.args.get('page',1,type=int)
     get_cat = Category.query.filter_by(id=id).first_or_404()
     category = Addskin.query.filter_by(category=get_cat).paginate(page=page, per_page=8)
@@ -32,6 +44,10 @@ def get_category(id):
 
 @app.route('/product/<int:id>')
 def single_page(id):
+    if 'email' not in session:
+        print("esta el email")
+        flash(f'Iniciar Sesion antes', 'danger')
+        return redirect(url_for('login'))
     skin = Addskin.query.get_or_404(id)
     categories = Category.query.join(Addskin, (Category.id == Addskin.category_id)).all()
     barnds = Brand.query.join(Addskin, (Brand.id == Addskin.brand_id)).all()
@@ -69,6 +85,10 @@ def updatecollection(id):
 
 @app.route('/deletecollection/<int:id>', methods = ['POST'])
 def deletecollection(id):
+    if 'email' not in session:
+        print("esta el email")
+        flash(f'Iniciar Sesion antes', 'danger')
+        return redirect(url_for('login'))
     estado = True
     brand = Brand.query.get_or_404(id)
     skins = Addskin.query.all()
@@ -118,6 +138,10 @@ def addcat():
 
 @app.route('/deletecat/<int:id>', methods = ['POST'])
 def deletecat(id):
+    if 'email' not in session:
+        print("esta el email")
+        flash(f'Iniciar Sesion antes', 'danger')
+        return redirect(url_for('login'))
     estado = True
     category = Category.query.get_or_404(id)
     skins = Addskin.query.all()
@@ -160,6 +184,10 @@ def addskin():
 
 @app.route('/updateskin/<int:id>', methods=["GET","POST"])
 def updateskin(id):
+    if 'email' not in session:
+        print("esta el email")
+        flash(f'Iniciar Sesion antes', 'danger')
+        return redirect(url_for('login'))
     collec = Brand.query.all()
     categories = Category.query.all()
     skin = Addskin.query.get_or_404(id)
@@ -191,6 +219,10 @@ def updateskin(id):
 
 @app.route('/deleteskin/<int:id>', methods = ['POST'])
 def deleteskin(id):
+    if 'email' not in session:
+        print("esta el email")
+        flash(f'Iniciar Sesion antes', 'danger')
+        return redirect(url_for('login'))
     skin = Addskin.query.get_or_404(id)
     if request.method == 'POST':
         try:
