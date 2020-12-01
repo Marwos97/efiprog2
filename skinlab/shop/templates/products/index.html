@@ -1,47 +1,6 @@
 {% extends 'layout.html' %}
 {%block content%}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Home</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/">SKINS</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    COLECCIÓN
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    {% for collect in collections %}
-                    <a class="dropdown-item" href="{{url_for('get_collection', id = collect.id)}}">{{collect.name}}</a>
-                    {%endfor%}
-                </div>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    CATEGORIAS
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    {% for cat in categories %}
-                    <a class="dropdown-item" href="{{url_for('get_category', id = cat.id)}}">{{cat.name}}</a>
-                    {%endfor%}
-                </div>
-            </li>
-            <li class ="nav-item">
-                <a class = "nav-link disabled" href="#" tabindex="-1">Carro({{session['Shoppingcart']|length}})</a>
-            </li>
-        </ul>
-        
-    </div>
-    <div style = "display: flex;">
-        <a class="nav-link" href="/logout">Logout</a>
-    </div>
-    <img src="{{url_for('static',filename='images/icono.png')}}" alt="www.skinlab.com" width="200">
-</nav>
+{%include 'navbar.html'%}
 <div class="container">
     <div class="row">
         <div class="row">
@@ -59,8 +18,7 @@
                         <form action="{{url_for('AddCart')}}" method="POST">
                             <input type="hidden" name="skin_id" value = "{{b.id}}">
                             <button type = "submit" class = "btn btn-sm btn-warning float-right">Agregar al carro</button>
-                            <label for="">Cantidad: </label>
-                            <input type="hidden" name="quantity" id ="" value="1"">
+                            <input type="hidden" name="quantity" id ="" value="1" min="1" max ="{{b.stock}}">
                         </form>
                     </div>
                 </div>
@@ -90,27 +48,28 @@
                 </div>
             </div>
         </div>
-        {% elif category%}
-        {%for cat in category.items%}
-        <div class ="col-md-3 mt-3">
-            <div class="card">
-                <img src="{{url_for('static', filename='images/' + cat.image)}}" alt="{{cat.name}}" class="card-img-top" height="200">
-                <div class="card-body">
-                    <h5 class = "text-center">{{cat.name}}</h5>
-                    <p class = "text-center"> Precio: ${{cat.price}}</p>
-                </div>
-                <div class="card-footer">
-                    <a href="{{url_for('single_page', id=cat.id)}}" class = "float-left btn btn-sm btn-primary">Detalles</a>
-                    <form action="{{url_for('AddCart')}}" method="POST">
-                        <input type="hidden" name="skin_id" value = "{{cat.id}}">
-                        <button type = "submit" class = "btn btn-sm btn-warning float-right">Agregar al carro</button>
-                        <label for="">Cantidad: </label>
-                        <input type="hidden" name="quantity" id ="" value="1">
-                    </form>
+        <div class = "row">
+            {% elif category%}
+            {%for cat in category.items%}
+            <div class ="col-md-3 mt-3">
+                <div class="row">
+                    <img src="{{url_for('static', filename='images/' + cat.image)}}" alt="{{cat.name}}" class="card-img-top" height="200">
+                    <div class="card-body">
+                        <h5 class = "text-center">{{cat.name}}</h5>
+                        <p class = "text-center"> Precio: ${{cat.price}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{url_for('single_page', id=cat.id)}}" class = "float-left btn btn-sm btn-primary">Detalles</a>
+                        <form action="{{url_for('AddCart')}}" method="POST">
+                            <input type="hidden" name="skin_id" value = "{{cat.id}}">
+                            <button type = "submit" class = "btn btn-sm btn-warning float-right">Agregar al carro</button>
+                            <input type="hidden" name="quantity" id ="" value="1" min="1" max ="{{cat.stock}}">
+                        </form>
+                    </div>
                 </div>
             </div>
+            {%endfor%}
         </div>
-        {%endfor%}
         <div class="container">
             <div class="row">
                 <div class="col text-center">
@@ -178,9 +137,9 @@
                     {%endif%}
                 </div>
             </div>
+        {%endif%}
         </div>
-    {%endif%}
-</div>
+    </div>
 </div>
 
 {%endblock%}
